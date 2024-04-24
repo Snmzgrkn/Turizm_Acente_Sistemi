@@ -93,6 +93,7 @@ public class Reservation {
     }
 
     public int getTotal_price() {
+        total_price = total_price + (otel.getRoomtype().getPrice() * adult_number) + ((otel.getRoomtype().getPrice() * child_number)/2);
         return total_price;
     }
 

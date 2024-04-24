@@ -51,6 +51,62 @@ public class OtelDao {
         }
         return otel;
     }
+    public boolean save(Otel otel){
+        String query = "INSERT INTO otel (otel_name, otel_address, otel_mail, otel_phoneno, otel_star, otel_pensiontype_id, otel_feature_ids, otel_room_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(query);
+            ps.setString(1, otel.getName());
+            ps.setString(2, otel.getAddress());
+            ps.setString(3, otel.getMail());
+            ps.setString(4, otel.getPhoneno());
+            ps.setInt(5, otel.getStar());
+            ps.setInt(6, otel.getPensiontype().getId()); // Pension type ID
+            ps.setString(7, formatFeatures(otel.getFeatures())); // Feature IDs
+            ps.setInt(8, otel.getRoomtype().getId()); // Room type ID
+            return ps.executeUpdate() != -1;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+    public boolean update(Otel otel) {
+        String query = "UPDATE otel " +
+                "SET otel_name = ?, otel_address = ?, otel_mail = ?, otel_phoneno = ?, otel_star = ?, " +
+                "otel_pensiontype_id = ?, otel_feature_ids = ?, otel_room_id = ? " +
+                "WHERE otel_id = ?";
+
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(query);
+            ps.setString(1, otel.getName());
+            ps.setString(2, otel.getAddress());
+            ps.setString(3, otel.getMail());
+            ps.setString(4, otel.getPhoneno());
+            ps.setInt(5, otel.getStar());
+            ps.setInt(6, otel.getPensiontype().getId()); // Pension type ID
+            ps.setString(7, formatFeatures(otel.getFeatures())); // Feature IDs
+            ps.setInt(8, otel.getRoomtype().getId()); // Room type ID
+            ps.setInt(9, otel.getId()); // Otel ID
+
+            return ps.executeUpdate() != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+    private String formatFeatures(List<Feature> features) {
+        StringBuilder sb = new StringBuilder();
+        if (features != null && !features.isEmpty()) {
+            for (Feature feature : features) {
+                sb.append(feature.getName()).append(", "); // Özellik ismini ekleyerek virgülle ayır
+            }
+            sb.setLength(sb.length() - 2); // Son virgülü ve boşluğu kaldır
+        }
+        return sb.toString();
+    }
 
     public Otel match(ResultSet rs) throws SQLException {
         Otel obj = new Otel();

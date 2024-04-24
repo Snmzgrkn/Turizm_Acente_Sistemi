@@ -1,7 +1,5 @@
 package entity;
 
-import view.RoomView;
-
 import java.util.List;
 
 public class Otel {
@@ -38,6 +36,18 @@ public class Otel {
         this.features = features;
         this.roomtype=roomtype;
     }
+    public Otel(String name, String address, String mail, String phoneno, int star, Pension pensiontype, List<Feature> features, Room roomtype) {
+
+        this.name = name;
+        this.address = address;
+        this.mail = mail;
+        this.phoneno = phoneno;
+        this.star = star;
+        this.pensiontype = pensiontype;
+        this.features = features;
+        this.roomtype=roomtype;
+    }
+
 
     public Pension getPensiontype() {
         return pensiontype;

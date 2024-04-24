@@ -5,15 +5,19 @@ import business.OtelManager;
 import business.PensionManager;
 import business.RoomManager;
 import core.ComboItem;
+import core.Helper;
+import core.JListItem;
 import dao.FeatureDao;
 import dao.PensionDao;
-import dao.RoomDao;
 import entity.Feature;
 import entity.Otel;
 import entity.Pension;
 import entity.Room;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class OtelView extends Layout {
     private JPanel container;
@@ -32,7 +36,7 @@ public class OtelView extends Layout {
     private JLabel lbl_otel_pensiontype;
     private JLabel lbl_otel_features;
     private JList list_features;
-    private JButton kaydetButton;
+    private JButton btn_otel_save;
     private JComboBox cmb_room;
     private JLabel lbl_room;
     private Otel otel;
@@ -74,5 +78,50 @@ public class OtelView extends Layout {
         for(Room room : this.roomManager.findAll()){
             this.cmb_room.addItem(new ComboItem(room.getId(),room.getName(),room.getPrice()));
         }
+
+        btn_otel_save.addActionListener(e -> {
+            if (Helper.isFieldEmpty(this.fld_otel_name)) {
+                Helper.showMessage("Please fill in the hotel name.");
+            } else {
+                String name = this.fld_otel_name.getText();
+                String address = this.fld_otel_address.getText();
+                String mail = this.fld_otel_mail.getText();
+                String phoneno = this.fld_otel_phoneno.getText();
+                int star = Integer.parseInt(this.fld_otel_star.getText());
+                ComboItem selectedPensionItem = (ComboItem) this.cmb_otel_pensiontype.getSelectedItem();
+                int pensionTypeId = selectedPensionItem.getKey();
+
+                // Seçilen özelliklerin ID'lerini alalım
+                List<Integer> selectedFeatureIds = new ArrayList<>();
+                int[] selectedIndices = list_features.getSelectedIndices();
+                for (int index : selectedIndices) {
+                    ComboItem selectedComboItem = (ComboItem) list_features.getModel().getElementAt(index);
+                    int featureId = selectedComboItem.getKey();
+                    selectedFeatureIds.add(featureId);
+                }
+                // Seçilen özelliklerle bir Otel nesnesi oluşturalım
+                Pension selectedPension = this.pensionManager.findById(pensionTypeId);
+                Room selectedRoom = (Room) this.cmb_room.getSelectedItem();
+
+                Otel newOtel = new Otel(name, address, mail, phoneno, star, selectedPension, selectedFeatureIds, selectedRoom);
+                boolean result;
+
+                if (this.otel == null) {
+                    // Yeni Otel nesnesini kaydet
+                    result = this.otelManager.save(newOtel);
+                } else {
+                    // Var olan Otel nesnesini güncelle
+                    newOtel.setId(this.otel.getId()); // Güncelleme için mevcut Otel'in ID'sini ayarla
+                    result = this.otelManager.update(newOtel);
+                }
+
+                if (result) {
+                    Helper.showMessage("Hotel saved successfully.");
+                    dispose(); // Pencereyi kapat
+                } else {
+                    Helper.showMessage("Error occurred while saving hotel.");
+                }
+            }
+        });
     }
 }

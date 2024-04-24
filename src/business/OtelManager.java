@@ -1,5 +1,6 @@
 package business;
 
+import core.Helper;
 import dao.OtelDao;
 import entity.Feature;
 import entity.Otel;
@@ -39,6 +40,18 @@ public class OtelManager {
             otelRowList.add(rowObject);
         }
         return otelRowList;
+    }
+    public boolean save(Otel otel){
+        if(otel.getId() != 0){
+            Helper.showMessage("error");
+        }
+        return this.otelDao.save(otel);
+    }
+    public boolean update(Otel otel){
+        if(this.findById(otel.getId()) == null){
+            Helper.showMessage("notfound");
+        }
+        return this.otelDao.update(otel);
     }
     private String formatFeatures(List<Feature> features) {
         StringBuilder sb = new StringBuilder();

@@ -16,6 +16,9 @@ public class JListItem {
     public String getValue() {
         return value;
     }
+    public String getDeger(){
+        return this.value;
+    }
 
     @Override
     public String toString() {
