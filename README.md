@@ -8,7 +8,6 @@ Bu proje, Patika+ Backend Programı için Bitirme Projesi olarak geliştirilmiş
 - Swing (GUI)
 - PostgreSQL (Veritabanı)
 - JDBC (Java Veritabanı Bağlantısı)
-- Maven (Bağımlılık Yönetimi)
 
 ## Projeyi Çalıştırma
 
@@ -27,7 +26,7 @@ PostgreSQL veritabanında otel adında bir veritabanı oluşturun.
   db.password=sifre
 ```
 24.04.2024 Readme 23:59 olmadan düzeltilecek
-Yapılamıyanlar
+# Eksik Kısımlar
 - Arama Kısımları
 - Rezervasyon Güncelleme Silme 
 - Otel Ekleme(Tesis Özellikleri Eklenirken Sıkıntı Çıkıyor)
