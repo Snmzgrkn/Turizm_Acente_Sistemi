@@ -1,7 +1,8 @@
 # Turizm Acentesi Projesi
 
 Bu proje, Patika+ Backend Programı için Bitirme Projesi olarak geliştirilmiştir. Proje, bir turizm acentesi yönetim sistemini simüle etmektedir.
-
+# Veritabanı Şeması
+![Veritabanı](images/veritabanı.png)
 ## Kullanılan Teknolojiler
 
 - Java
