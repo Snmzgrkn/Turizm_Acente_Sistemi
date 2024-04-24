@@ -2,4 +2,5 @@
 Yapılamıyanlar
 - Arama Kısımları
 - Rezervasyon Güncelleme Silme 
-- Ücret Hesabı
+- Otel Ekleme(Tesis Özellikleri Eklenirken Sıkıntı Çıkıyor)
+  
