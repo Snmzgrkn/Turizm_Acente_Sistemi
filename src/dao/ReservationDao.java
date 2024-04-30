@@ -64,6 +64,7 @@ public class ReservationDao {
         }
         return true;
     }
+
     public boolean update(Reservation reservation){
         String query = "UPDATE public.reservation " +
                 "SET reservation_customer_name = ?, reservation_otel_id = ?, reservation_strt_date = ?, reservation_fnsh_date = ?, reservation_adult_number = ?, " +
