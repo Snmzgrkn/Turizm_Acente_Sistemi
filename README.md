@@ -4,6 +4,9 @@ Bu proje, Patika+ Backend Programı için Bitirme Projesi olarak geliştirilmiş
 # Veritabanı Şeması
 turizmacente.sql
 ![Veritabanı](images/veritabanı.png)
+<video src='images/Turizm Acente 2024-04-30 21-41-19.mp4' width=180/>
+![login](images/login.png)
+![Rezervasyon Ekleme](images/addreservation.png)
 ## Kullanılan Teknolojiler
 
 - Java
