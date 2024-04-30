@@ -65,11 +65,18 @@ public class ReservationDao {
         return true;
     }
     public boolean update(Reservation reservation){
-        String query = "UPDATE public.feature SET feature_name = ? WHERE feature_id = ?";
+        String query = "UPDATE public.reservation " +
+                "SET reservation_customer_name = ?, reservation_otel_id = ?, reservation_strt_date = ?, reservation_fnsh_date = ?, reservation_adult_number = ?, " +
+                "reservation_child_number = ? " +
+                "WHERE reservation_id = ?";
         try {
             PreparedStatement pr = this.connection.prepareStatement(query);
             pr.setString(1,reservation.getCustomer_name());
-            pr.setInt(2,reservation.getId());
+            pr.setInt(2,reservation.getOtel().getId());
+            pr.setString(3, String.valueOf((reservation.getStrt_date())));
+            pr.setString(4, String.valueOf((reservation.getFnsh_date())));
+            pr.setInt(5,reservation.getAdult_number());
+            pr.setInt(6,reservation.getChild_number());
             return pr.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
