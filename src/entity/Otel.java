@@ -1,5 +1,7 @@
 package entity;
 
+import core.ComboItem;
+
 import java.util.List;
 
 public class Otel {
@@ -10,8 +12,8 @@ public class Otel {
     private String phoneno;
     private int star;
     private Pension pensiontype;
-    private List<Feature> features;
     private Room roomtype;
+    private String features;
 
     public Otel() {
 
@@ -25,7 +27,15 @@ public class Otel {
         this.roomtype = roomtype;
     }
 
-    public Otel(int id, String name, String address, String mail, String phoneno, int star, Pension pensiontype, List<Feature> features, Room roomtype) {
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
+    }
+
+    public Otel(int id, String name, String address, String mail, String phoneno, int star, Pension pensiontype, Room roomtype, String features) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -33,10 +43,10 @@ public class Otel {
         this.phoneno = phoneno;
         this.star = star;
         this.pensiontype = pensiontype;
-        this.features = features;
         this.roomtype=roomtype;
+        this.features = features;
     }
-    public Otel(String name, String address, String mail, String phoneno, int star, Pension pensiontype, List<Feature> features, Room roomtype) {
+    public Otel(String name, String address, String mail, String phoneno, int star, Pension pensiontype, Room roomtype, String features) {
 
         this.name = name;
         this.address = address;
@@ -44,8 +54,8 @@ public class Otel {
         this.phoneno = phoneno;
         this.star = star;
         this.pensiontype = pensiontype;
-        this.features = features;
         this.roomtype=roomtype;
+        this.features = features;
     }
 
 
@@ -57,13 +67,6 @@ public class Otel {
         this.pensiontype = pensiontype;
     }
 
-    public List<Feature> getFeatures() {
-        return features;
-    }
-
-    public void setFeatures(List<Feature> features) {
-        this.features = features;
-    }
 
     public int getId() {
         return id;
@@ -113,8 +116,21 @@ public class Otel {
         this.star = star;
     }
 
+    public ComboItem getComboItem(){
+        return new ComboItem(this.getId(),this.getName() + " - "+this.getPensiontype().getName());
+    }
     @Override
     public String toString() {
-        return  name + '\'' + address + star + pensiontype + features + roomtype;
+        return "Otel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", mail='" + mail + '\'' +
+                ", phoneno='" + phoneno + '\'' +
+                ", star=" + star +
+                ", pensiontype=" + pensiontype +
+                ", roomtype=" + roomtype +
+                ", features='" + features + '\'' +
+                '}';
     }
 }

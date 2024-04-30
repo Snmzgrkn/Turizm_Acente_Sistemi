@@ -47,11 +47,12 @@ public class RoomDao {
         return room;
     }
     public boolean save(Room room){
-        String query = "INSERT INTO public.room (room_name,room_price) VALUES (?,?)";
+        String query = "INSERT INTO public.room (room_name,room_price,room_stock) VALUES (?,?,?)";
         try {
             PreparedStatement pr = this.connection.prepareStatement(query);
             pr.setString(1,room.getName());
             pr.setInt(2,room.getPrice());
+            pr.setInt(3,room.getStock());
             return pr.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
@@ -87,6 +88,7 @@ public class RoomDao {
         room.setId(rs.getInt("room_id"));
         room.setName(rs.getString("room_name"));
         room.setPrice(rs.getInt("room_price"));
+        room.setStock(rs.getInt("room_stock"));
         return room;
     }
 }

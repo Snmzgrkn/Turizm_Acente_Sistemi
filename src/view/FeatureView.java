@@ -40,7 +40,7 @@ public class FeatureView extends Layout {
                 }
 
                 if (result){
-                    Helper.showMessage("done");
+                    Helper.showMessage("Feature saved successfully.");
                     dispose();
                 }else {
                     Helper.showMessage("error");

@@ -17,7 +17,7 @@
           <text value="Rezervasyon Ekle / Düzenle"/>
         </properties>
       </component>
-      <component id="432e2" class="javax.swing.JLabel">
+      <component id="432e2" class="javax.swing.JLabel" binding="lbl_customer_name">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -25,7 +25,7 @@
           <text value="Müşteri İsim Soyisim:"/>
         </properties>
       </component>
-      <component id="85e13" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+      <component id="85e13" class="javax.swing.JTextField" binding="fld_customer_name">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -33,7 +33,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="bb087" class="javax.swing.JLabel">
+      <component id="bb087" class="javax.swing.JLabel" binding="lbl_otel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -41,13 +41,13 @@
           <text value="Otel:"/>
         </properties>
       </component>
-      <component id="ae350" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+      <component id="ae350" class="javax.swing.JComboBox" binding="cmb_otel">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
       </component>
-      <component id="de268" class="javax.swing.JLabel">
+      <component id="de268" class="javax.swing.JLabel" binding="lbl_start_date">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -55,15 +55,7 @@
           <text value="Başlangıç Tarihi:"/>
         </properties>
       </component>
-      <component id="747f4" class="javax.swing.JFormattedTextField" binding="formattedTextField1" default-binding="true">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="93889" class="javax.swing.JLabel">
+      <component id="93889" class="javax.swing.JLabel" binding="lbl_fnsh_date">
         <constraints>
           <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -71,15 +63,7 @@
           <text value="Bitiş Tarihi:"/>
         </properties>
       </component>
-      <component id="e546c" class="javax.swing.JFormattedTextField" binding="formattedTextField2" default-binding="true">
-        <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="fa28d" class="javax.swing.JLabel">
+      <component id="fa28d" class="javax.swing.JLabel" binding="lbl_adult_number">
         <constraints>
           <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -87,7 +71,7 @@
           <text value="Yetişkin Sayısı:"/>
         </properties>
       </component>
-      <component id="d4343" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+      <component id="d4343" class="javax.swing.JTextField" binding="fld_adult_number">
         <constraints>
           <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -95,7 +79,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="edeeb" class="javax.swing.JLabel">
+      <component id="edeeb" class="javax.swing.JLabel" binding="lbl_child_number">
         <constraints>
           <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -103,7 +87,7 @@
           <text value="Çocuk Sayısı:"/>
         </properties>
       </component>
-      <component id="5b54d" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+      <component id="5b54d" class="javax.swing.JTextField" binding="fld_child_number">
         <constraints>
           <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -111,13 +95,29 @@
         </constraints>
         <properties/>
       </component>
-      <component id="cf2e8" class="javax.swing.JButton" binding="kaydetButton" default-binding="true">
+      <component id="cf2e8" class="javax.swing.JButton" binding="btn_reservation_save">
         <constraints>
           <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Kaydet:"/>
         </properties>
+      </component>
+      <component id="2c209" class="javax.swing.JTextField" binding="fld_strt_date">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c0252" class="javax.swing.JTextField" binding="fld_fnsh_date">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>

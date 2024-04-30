@@ -6,10 +6,7 @@ import entity.Otel;
 import entity.Pension;
 import entity.Reservation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -52,10 +49,15 @@ public class ReservationDao {
         return reservation;
     }
     public boolean save(Reservation reservation){
-        String query = "INSERT INTO public.feature (feature_name) VALUES (?)";
+        String query = "INSERT INTO public.reservation (reservation_customer_name,reservation_otel_id,reservation_strt_date,reservaton_fnsh_date,reservation_adult_number,reservation_child_number) VALUES (?,?,?,?,?,?)";
         try {
             PreparedStatement pr = this.connection.prepareStatement(query);
             pr.setString(1,reservation.getCustomer_name());
+            pr.setInt(2,reservation.getOtel().getId());
+            pr.setString(3, String.valueOf((reservation.getStrt_date())));
+            pr.setString(4, String.valueOf((reservation.getFnsh_date())));
+            pr.setInt(5,reservation.getAdult_number());
+            pr.setInt(6,reservation.getChild_number());
             return pr.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
@@ -75,7 +77,7 @@ public class ReservationDao {
         return true;
     }
     public boolean delete(int id){
-        String query = "DELETE FROM public.feature WHERE feature_id = ?";
+        String query = "DELETE FROM public.reservation WHERE reservation_id = ?";
         try{
             PreparedStatement pr = this.connection.prepareStatement(query);
             pr.setInt(1,id);

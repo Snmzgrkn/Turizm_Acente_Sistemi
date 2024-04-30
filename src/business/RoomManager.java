@@ -4,6 +4,7 @@ import core.Helper;
 import dao.FeatureDao;
 import dao.RoomDao;
 import entity.Feature;
+import entity.Pension;
 import entity.Room;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class RoomManager {
             rowObject[i++] = room.getId();
             rowObject[i++] = room.getName();
             rowObject[i++] = room.getPrice();
+            rowObject[i++] = room.getStock();
             roomRowList.add(rowObject);
         }
         return roomRowList;

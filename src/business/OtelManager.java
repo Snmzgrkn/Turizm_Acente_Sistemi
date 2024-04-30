@@ -4,7 +4,6 @@ import core.Helper;
 import dao.OtelDao;
 import entity.Feature;
 import entity.Otel;
-import entity.Pension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,17 @@ public class OtelManager {
     public Otel findById(int id){
         return this.otelDao.findById(id);
     }
+    public boolean delete(int id){
+        if(this.findById(id)==null){
+            Helper.showMessage(id+" ID kayıtlı otel bulunmadı.");
+            return false;
+        }
+        return this.otelDao.delete(id);
+    }
 
-    public ArrayList<Object[]> getForTable(int size){
+    public ArrayList<Object[]> getForTable(int size, ArrayList<Otel> all){
         ArrayList<Object[]> otelRowList = new ArrayList<>();
-        for(Otel otel : this.findAll()){
+        for(Otel otel : all){
             Object[] rowObject = new Object[size];
             int i =0;
             rowObject[i++] = otel.getId();
@@ -35,8 +41,8 @@ public class OtelManager {
             rowObject[i++] = otel.getPhoneno();
             rowObject[i++] = otel.getStar();
             rowObject[i++] = otel.getPensiontype().getName();
-            rowObject[i++] = formatFeatures(otel.getFeatures());
             rowObject[i++] = otel.getRoomtype().getName();
+            rowObject[i++] = otel.getFeatures();
             otelRowList.add(rowObject);
         }
         return otelRowList;
@@ -53,14 +59,21 @@ public class OtelManager {
         }
         return this.otelDao.update(otel);
     }
-    private String formatFeatures(List<Feature> features) {
-        StringBuilder sb = new StringBuilder();
-        if (features != null && !features.isEmpty()) {
-            for (Feature feature : features) {
-                sb.append(feature.getName()).append(", "); // Özellik ismini ekleyerek virgülle ayır
-            }
-            sb.setLength(sb.length() - 2); // Son virgülü ve boşluğu kaldır
+    public  ArrayList<Otel> searchForTable(int pension_id, int room_id  ){
+        String select = "SELECT * FROM public.otel";
+        ArrayList<String> wherelist = new ArrayList<>();
+        if(pension_id != 0){
+            wherelist.add("otel_pensiontype_id ="+pension_id);
+
         }
-        return sb.toString();
+        if (room_id != 0){
+            wherelist.add("otel_room_id ="+room_id);
+        }
+        String whereStr = String.join(" AND ",wherelist);
+        String query = select;
+        if(whereStr.length() > 0){
+            query += " WHERE "+whereStr;
+        }
+        return  this.otelDao.selectByQuery(query);
     }
 }

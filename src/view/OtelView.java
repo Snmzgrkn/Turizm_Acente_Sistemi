@@ -6,17 +6,14 @@ import business.PensionManager;
 import business.RoomManager;
 import core.ComboItem;
 import core.Helper;
-import core.JListItem;
 import dao.FeatureDao;
 import dao.PensionDao;
-import entity.Feature;
 import entity.Otel;
 import entity.Pension;
 import entity.Room;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class OtelView extends Layout {
@@ -34,11 +31,12 @@ public class OtelView extends Layout {
     private JLabel lbl_otel_phoneno;
     private JLabel lbl_otel_star;
     private JLabel lbl_otel_pensiontype;
-    private JLabel lbl_otel_features;
     private JList list_features;
     private JButton btn_otel_save;
     private JComboBox cmb_room;
     private JLabel lbl_room;
+    private JTextField fld_otel_features;
+    private JLabel lbl_otel_features;
     private Otel otel;
     private OtelManager otelManager;
     private PensionManager pensionManager;
@@ -62,22 +60,19 @@ public class OtelView extends Layout {
             this.fld_otel_mail.setText(otel.getMail());
             this.fld_otel_phoneno.setText(otel.getPhoneno());
             this.fld_otel_star.setText(String.valueOf(otel.getStar()));
-
+            this.cmb_otel_pensiontype.addItem(new ComboItem(otel.getPensiontype().getId(),otel.getPensiontype().getName()));
+            this.cmb_room.addItem(new ComboItem(otel.getRoomtype().getId(),otel.getRoomtype().getName(),otel.getRoomtype().getPrice()));
+            this.fld_otel_features.setText(String.valueOf(otel.getFeatures()));
         }
 
         for(Pension pension : this.pensionManager.findAll()){
             this.cmb_otel_pensiontype.addItem(new ComboItem(pension.getId(),pension.getName()));
         }
-        DefaultListModel<ComboItem> listModel = new DefaultListModel<>();
-        for (Feature feature : this.featureManager.findAll()) {
-            ComboItem comboItem = new ComboItem(feature.getId(), feature.getName());
-            listModel.addElement(comboItem);
-        }
-        this.list_features.setModel(listModel);
 
         for(Room room : this.roomManager.findAll()){
             this.cmb_room.addItem(new ComboItem(room.getId(),room.getName(),room.getPrice()));
         }
+
 
         btn_otel_save.addActionListener(e -> {
             if (Helper.isFieldEmpty(this.fld_otel_name)) {
@@ -88,22 +83,19 @@ public class OtelView extends Layout {
                 String mail = this.fld_otel_mail.getText();
                 String phoneno = this.fld_otel_phoneno.getText();
                 int star = Integer.parseInt(this.fld_otel_star.getText());
+
                 ComboItem selectedPensionItem = (ComboItem) this.cmb_otel_pensiontype.getSelectedItem();
                 int pensionTypeId = selectedPensionItem.getKey();
-
-                // Seçilen özelliklerin ID'lerini alalım
-                List<Integer> selectedFeatureIds = new ArrayList<>();
-                int[] selectedIndices = list_features.getSelectedIndices();
-                for (int index : selectedIndices) {
-                    ComboItem selectedComboItem = (ComboItem) list_features.getModel().getElementAt(index);
-                    int featureId = selectedComboItem.getKey();
-                    selectedFeatureIds.add(featureId);
-                }
-                // Seçilen özelliklerle bir Otel nesnesi oluşturalım
                 Pension selectedPension = this.pensionManager.findById(pensionTypeId);
-                Room selectedRoom = (Room) this.cmb_room.getSelectedItem();
 
-                Otel newOtel = new Otel(name, address, mail, phoneno, star, selectedPension, selectedFeatureIds, selectedRoom);
+                // Seçilen özelliklerle bir Otel nesnesi oluşturalım
+
+                ComboItem selectedRoomItem = (ComboItem) this.cmb_room.getSelectedItem();
+                int roomId = selectedRoomItem.getKey();
+                Room selectedRoom = this.roomManager.findById(roomId);
+                String features = this.fld_otel_features.getText();
+
+                Otel newOtel = new Otel(name, address, mail, phoneno, star, selectedPension, selectedRoom,features);
                 boolean result;
 
                 if (this.otel == null) {
@@ -121,6 +113,7 @@ public class OtelView extends Layout {
                 } else {
                     Helper.showMessage("Error occurred while saving hotel.");
                 }
+
             }
         });
     }

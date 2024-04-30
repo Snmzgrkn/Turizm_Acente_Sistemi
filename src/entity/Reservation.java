@@ -22,8 +22,8 @@ public class Reservation {
         this.child_number = child_number;
         this.total_price = total_price;
     }
-    public Reservation(String custmer_name, Otel otel, LocalDate strt_date, LocalDate fnsh_date, int adult_number, int child_number, int total_price) {
-        this.customer_name = custmer_name;
+    public Reservation(String customer_name, Otel otel, LocalDate strt_date, LocalDate fnsh_date, int adult_number, int child_number, int total_price) {
+        this.customer_name = customer_name;
         this.otel = otel;
         this.strt_date = strt_date;
         this.fnsh_date = fnsh_date;
@@ -34,6 +34,15 @@ public class Reservation {
 
     public Reservation() {
 
+    }
+
+    public Reservation(String customerName, Otel selectedOtel, LocalDate strtDate, LocalDate fnshDate, String adultNumber, String childNumber) {
+        this.customer_name = customer_name;
+        this.otel = otel;
+        this.strt_date = strt_date;
+        this.fnsh_date = fnsh_date;
+        this.adult_number = adult_number;
+        this.child_number = child_number;
     }
 
     public int getId() {
@@ -93,11 +102,11 @@ public class Reservation {
     }
 
     public int getTotal_price() {
-        total_price = total_price + (otel.getRoomtype().getPrice() * adult_number) + ((otel.getRoomtype().getPrice() * child_number)/2);
         return total_price;
     }
 
     public void setTotal_price(int total_price) {
+        total_price = total_price + (otel.getRoomtype().getPrice() * adult_number) + ((otel.getRoomtype().getPrice() * child_number)/2);
         this.total_price = total_price;
     }
 }

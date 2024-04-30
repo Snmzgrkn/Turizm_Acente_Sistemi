@@ -202,7 +202,7 @@ public class EmployeeView extends Layout{
     }
     public void loadOtelTable(){
         Object[] col_otel = {"Otel ID","Otel Adı","Otel Adresi","Mail","Telefon No","Yıldız","Pansiyon Tipi","Tesis Özellikleri","Oda Tipi"};
-        ArrayList<Object[]> otelList = this.otelManager.getForTable(col_otel.length);
+        ArrayList<Object[]> otelList = this.otelManager.getForTable(col_otel.length, this.otelManager.findAll());
         this.createTable(tmdl_otel,tbl_otel,col_otel,otelList);
     }
     public void loadOtelComponent(){

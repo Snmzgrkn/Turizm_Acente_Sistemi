@@ -1,7 +1,11 @@
 package view;
 
 import business.*;
+import core.ComboItem;
 import core.Helper;
+import entity.Otel;
+import entity.Pension;
+import entity.Room;
 import entity.User;
 
 import javax.swing.*;
@@ -39,6 +43,10 @@ public class AdminView extends Layout {
     private JTable tbl_reservation;
     private JPanel pnl_reservation;
     private JScrollPane scrl_reservation;
+    private JComboBox cmb_s_pensiontype;
+    private JComboBox cmb_s_room;
+    private JButton btn_search_otel;
+    private JButton btn_cncl_otel;
 
     private User user;
     private DefaultTableModel tmdl_otel = new DefaultTableModel();
@@ -62,6 +70,7 @@ public class AdminView extends Layout {
     private JPopupMenu userMenu;
     private JPopupMenu roomMenu;
     private JPopupMenu reservationMenu;
+    private  Object[] col_otel;
 
     public AdminView(User user){
         this.otelManager = new OtelManager();
@@ -83,9 +92,9 @@ public class AdminView extends Layout {
 
         //---------------------------------------------------------------------------------------------
 
-        loadOtelTable();
+        loadOtelTable(null);
         loadOtelComponent();
-
+        loadOtelFliter();
 
         //---------------------------------------------------------------------------------------------
         loadPensionTable();
@@ -104,6 +113,11 @@ public class AdminView extends Layout {
         loadRoomComponent();
         //---------------------------------------------------------------------------------------------
         loadReservationTable();
+        loadReservationComponent();
+
+
+
+
     }
 
     public void loadPensionTable(){
@@ -188,6 +202,7 @@ public class AdminView extends Layout {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     loadFeatureTable();
+
                 }
             });
         });
@@ -204,10 +219,12 @@ public class AdminView extends Layout {
 
         this.tbl_feature.setComponentPopupMenu(featureMenu);
     }
-    public void loadOtelTable(){
-        Object[] col_otel = {"Otel ID","Otel Adı","Otel Adresi","Mail","Telefon No","Yıldız","Pansiyon Tipi","Tesis Özellikleri","Oda Tipi"};
-        ArrayList<Object[]> otelList = this.otelManager.getForTable(col_otel.length);
-        this.createTable(tmdl_otel,tbl_otel,col_otel,otelList);
+    public void loadOtelTable(ArrayList<Object[]> otelList){
+        this.col_otel = new Object[]{"Otel ID", "Otel Adı", "Otel Adresi", "Mail", "Telefon No", "Yıldız", "Pansiyon Tipi", "Oda Tipi", "Tesis Özellikleri"};
+        if(otelList == null){
+            otelList = this.otelManager.getForTable(this.col_otel.length,this.otelManager.findAll());
+        }
+        createTable(this.tmdl_otel,this.tbl_otel,col_otel,otelList);
     }
     public void loadOtelComponent(){
         this.tbl_otel.addMouseListener(new MouseAdapter() {
@@ -226,7 +243,8 @@ public class AdminView extends Layout {
             OtelView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    loadOtelTable();
+                    loadOtelTable(null);
+                    loadOtelFliter();
                 }
             });
         });
@@ -236,13 +254,43 @@ public class AdminView extends Layout {
             otelView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    loadFeatureTable();
+                    loadOtelTable(null);
+                    loadOtelFliter();
                 }
             });
         });
-        this.otelMenu.add("Sil");
+        this.otelMenu.add("Sil").addActionListener(e -> {
+            if(Helper.confirm("sure")){
+                int selectOtelId = this.getTableSelectedRow(tbl_otel,0);
+                if(this.otelManager.delete(selectOtelId)){
+                    loadOtelTable(null);
+                    loadOtelFliter();
+                }else{
+                    Helper.showMessage("error");
+                }
+            }
+        });
 
         this.tbl_otel.setComponentPopupMenu(otelMenu);
+
+        this.btn_search_otel.addActionListener(e -> {
+            ComboItem selectedPension = (ComboItem) this.cmb_s_pensiontype.getSelectedItem();
+            ComboItem selectedRoom = (ComboItem) this.cmb_s_room.getSelectedItem();
+
+            ArrayList<Otel> otelListBySearch = this.otelManager.searchForTable(selectedPension.getKey(),selectedRoom.getKey());
+            System.out.println(otelListBySearch);
+
+            ArrayList<Object[]> otelRowListBySearch = this.otelManager.getForTable(this.col_otel.length,otelListBySearch);
+            loadOtelTable(otelRowListBySearch);
+        });
+
+        this.btn_cncl_otel.addActionListener(e -> {
+            this.cmb_s_pensiontype.setSelectedItem(null);
+            this.cmb_s_room.setSelectedItem(null);
+            loadOtelTable(null);
+        });
+
+
     }
     public void loadSeasonTable(){
         Object[] col_season = {"ID","Sezon Adı","Başlangıç Tarihi","Bitiş Tarihi","Fiyat Katsayısı"};
@@ -266,7 +314,7 @@ public class AdminView extends Layout {
             seasonView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    loadOtelTable();
+                    loadOtelTable(null);
                 }
             });
         });
@@ -334,7 +382,7 @@ public class AdminView extends Layout {
         this.tbl_user.setComponentPopupMenu(userMenu);
     }
     public void loadRoomTable(){
-        Object[] col_room= {"ID","Oda Adı","Oda Fiyatı"};
+        Object[] col_room= {"ID","Oda Adı","Oda Fiyatı","Stok"};
         ArrayList<Object[]> roomList = this.roomManager.getForTable(col_room.length);
         this.createTable(tmdl_room,tbl_room,col_room,roomList);
     }
@@ -387,6 +435,63 @@ public class AdminView extends Layout {
         ArrayList<Object[]> reservationList = this.reservationManager.getForTable(col_reservation.length);
         this.createTable(tmdl_reservation,tbl_reservation,col_reservation,reservationList);
     }
+    public void loadReservationComponent(){
+        this.tbl_reservation.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int selected_row = tbl_reservation.rowAtPoint(e.getPoint());
+                tbl_reservation.setRowSelectionInterval(selected_row,selected_row);
+            }
+        });
 
+        this.reservationMenu = new JPopupMenu();
+
+        JMenuItem newPensionItem = new JMenuItem("Yeni");
+        this.reservationMenu.add("Yeni").addActionListener(e -> {
+            ReservationView  reservationView = new ReservationView(null);
+            reservationView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadReservationTable();
+                }
+            });
+        });
+        this.reservationMenu.add("Güncelle").addActionListener(e -> {
+            int selectReservationId = this.getTableSelectedRow(tbl_reservation,0);
+            ReservationView reservationView = new ReservationView(this.reservationManager.findById(selectReservationId));
+            reservationView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadReservationTable();
+                }
+            });
+        });
+        this.reservationMenu.add("Sil").addActionListener(e -> {
+            if(Helper.confirm("sure")){
+                int selectUserId = this.getTableSelectedRow(tbl_reservation,0);
+                if(this.reservationManager.delete(selectUserId)){
+                    loadReservationTable();
+                }else{
+                    Helper.showMessage("error");
+                }
+            }
+        });
+
+        this.tbl_reservation.setComponentPopupMenu(reservationMenu);
+    }
+
+    public void loadOtelFliter(){
+        this.cmb_s_pensiontype.removeAllItems();
+        for(Pension obj : pensionManager.findAll()){
+            this.cmb_s_pensiontype.addItem(new ComboItem(obj.getId(),obj.getName()));
+        }
+        this.cmb_s_pensiontype.setSelectedItem(null);
+        this.cmb_s_room.removeAllItems();
+        for(Room obj : roomManager.findAll()){
+            this.cmb_s_room.addItem(new ComboItem(obj.getId(),obj.getName()));
+        }
+        this.cmb_s_room.setSelectedItem(null);
+
+    }
 
 }

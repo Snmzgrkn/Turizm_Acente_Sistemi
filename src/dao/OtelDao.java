@@ -52,7 +52,7 @@ public class OtelDao {
         return otel;
     }
     public boolean save(Otel otel){
-        String query = "INSERT INTO otel (otel_name, otel_address, otel_mail, otel_phoneno, otel_star, otel_pensiontype_id, otel_feature_ids, otel_room_id) " +
+        String query = "INSERT INTO otel (otel_name, otel_address, otel_mail, otel_phoneno, otel_star, otel_pensiontype_id, otel_room_id, otel_features) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = this.connection.prepareStatement(query);
@@ -62,8 +62,8 @@ public class OtelDao {
             ps.setString(4, otel.getPhoneno());
             ps.setInt(5, otel.getStar());
             ps.setInt(6, otel.getPensiontype().getId()); // Pension type ID
-            ps.setString(7, formatFeatures(otel.getFeatures())); // Feature IDs
-            ps.setInt(8, otel.getRoomtype().getId()); // Room type ID
+            ps.setInt(7,otel.getRoomtype().getId()); // Feature IDs
+            ps.setString(8, otel.getFeatures() ); // Room type ID
             return ps.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class OtelDao {
     public boolean update(Otel otel) {
         String query = "UPDATE otel " +
                 "SET otel_name = ?, otel_address = ?, otel_mail = ?, otel_phoneno = ?, otel_star = ?, " +
-                "otel_pensiontype_id = ?, otel_feature_ids = ?, otel_room_id = ? " +
+                "otel_pensiontype_id = ?, otel_room_id = ?,otel_features = ?" +
                 "WHERE otel_id = ?";
 
         try {
@@ -84,8 +84,8 @@ public class OtelDao {
             ps.setString(4, otel.getPhoneno());
             ps.setInt(5, otel.getStar());
             ps.setInt(6, otel.getPensiontype().getId()); // Pension type ID
-            ps.setString(7, formatFeatures(otel.getFeatures())); // Feature IDs
-            ps.setInt(8, otel.getRoomtype().getId()); // Room type ID
+            ps.setInt(7, otel.getRoomtype().getId()); // Feature IDs
+            ps.setString(8, otel.getFeatures()); // Room type ID
             ps.setInt(9, otel.getId()); // Otel ID
 
             return ps.executeUpdate() != -1;
@@ -95,17 +95,31 @@ public class OtelDao {
         }
     }
 
-
-
-    private String formatFeatures(List<Feature> features) {
-        StringBuilder sb = new StringBuilder();
-        if (features != null && !features.isEmpty()) {
-            for (Feature feature : features) {
-                sb.append(feature.getName()).append(", "); // Özellik ismini ekleyerek virgülle ayır
+    public ArrayList<Otel> getByListPensionId(int pensionId) {
+        return this.selectByQuery("SELECT * FROM public.otel WHERE otel_pensiontype_id = "+pensionId);
+    }
+    public ArrayList<Otel> selectByQuery(String query) {
+        ArrayList<Otel> otelList = new ArrayList<>();
+        try {
+            ResultSet rs = this.connection.createStatement().executeQuery(query);
+            while (rs.next()) {
+                otelList.add(this.match(rs));
             }
-            sb.setLength(sb.length() - 2); // Son virgülü ve boşluğu kaldır
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return sb.toString();
+        return otelList;
+    }
+    public boolean delete(int id){
+        String query = "DELETE FROM public.otel WHERE otel_id = ?";
+        try{
+            PreparedStatement pr = this.connection.prepareStatement(query);
+            pr.setInt(1,id);
+            return pr.executeUpdate() != -1;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public Otel match(ResultSet rs) throws SQLException {
@@ -121,30 +135,12 @@ public class OtelDao {
         Pension pension = pensionDao.findById(pensionId);
         obj.setPensiontype(pension);
 
-        String featuresIdsStr = rs.getString("otel_feature_ids");
-        if (featuresIdsStr != null && !featuresIdsStr.isEmpty()) {
-            featuresIdsStr = featuresIdsStr.replaceAll("[{}]", ""); // '{}' karakterlerini kaldır
-            String[] featureIds = featuresIdsStr.split(",");
-            List<Feature> features = new ArrayList<>();
-            for (String featureIdStr : featureIds) {
-                try {
-                    int featureId = Integer.parseInt(featureIdStr.trim());
-                    Feature feature = featureDao.findById(featureId);
-                    if (feature != null) {
-                        features.add(feature);
-                    } else {
-                        System.out.println("Feature not found with id: " + featureId);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid feature id: " + featureIdStr);
-                }
-            }
-            obj.setFeatures(features);
-        }
         int roomId = rs.getInt("otel_room_id");
         Room room = roomDao.findById(roomId);
         obj.setRoomtype(room);
 
+        obj.setFeatures(rs.getString("otel_features"));
         return obj;
     }
+
 }
