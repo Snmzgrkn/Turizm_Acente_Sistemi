@@ -5,6 +5,12 @@ Bu proje, Patika+ Backend Programı için Bitirme Projesi olarak geliştirilmiş
 turizmacente.sql
 ![Veritabanı](images/veritabanı.png)
 
+
+https://github.com/Snmzgrkn/TurizmAcenteProjesi/assets/56911478/6c2bd6cd-6a52-47c1-9fa6-2dcf8a8bc2e3
+
+![addreservation](https://github.com/Snmzgrkn/TurizmAcenteProjesi/assets/56911478/5869a000-e071-4919-9390-bdeda723d595)
+![login](https://github.com/Snmzgrkn/TurizmAcenteProjesi/assets/56911478/eb55ee76-0e66-4ecf-9969-489beb6525a5)
+
 <video src='images/Turizm Acente 2024-04-30 21-41-19.mp4' width=180/>
 
 ![login](images/login.png)
